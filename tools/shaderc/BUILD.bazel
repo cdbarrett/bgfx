@@ -8,6 +8,7 @@ cc_binary(
     ]),
     copts = [
         "-march=native",
+        "-I3rdparty/dawn",
         "-I3rdparty/glslang",
         "-I3rdparty/glslang/glslang/Include",
         "-I3rdparty/glslang/glslang/Public",
@@ -16,6 +17,8 @@ cc_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//:bgfx",
+        "//3rdparty/d3d4linux",
+        "//3rdparty/dawn:tint",
         "//3rdparty/directx-headers",
         "//3rdparty/fcpp",
         "//3rdparty/glsl-optimizer",

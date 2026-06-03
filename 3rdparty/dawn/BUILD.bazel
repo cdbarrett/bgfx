@@ -1,0 +1,49 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "tint",
+    srcs = glob(
+        [
+            "src/tint/api/**/*.cc",
+            "src/tint/lang/core/**/*.cc",
+            "src/tint/lang/spirv/**/*.cc",
+            "src/tint/lang/wgsl/**/*.cc",
+            "src/tint/utils/**/*.cc",
+            "src/tint/**/*.h",
+            "src/utils/*.h",
+        ],
+        exclude = [
+            "src/tint/**/*_test.cc",
+            "src/tint/**/*_bench.cc",
+            "src/tint/**/*_fuzz.cc",
+        ],
+    ),
+    hdrs = glob(["src/tint/api/**/*.h"]),
+    copts = [
+        "-std=c++20",
+        "-I3rdparty/dawn",
+        "-I3rdparty/dawn/src",
+        "-I3rdparty/spirv-tools",
+        "-I3rdparty/spirv-tools/include/generated",
+    ],
+    defines = [
+        "TINT_BUILD_GLSL_WRITER=0",
+        "TINT_BUILD_HLSL_WRITER=0",
+        "TINT_BUILD_MSL_WRITER=0",
+        "TINT_BUILD_NULL_WRITER=0",
+        "TINT_BUILD_SPV_READER=1",
+        "TINT_BUILD_SPV_WRITER=0",
+        "TINT_BUILD_WGSL_READER=0",
+        "TINT_BUILD_WGSL_WRITER=1",
+        "TINT_BUILD_IS_LINUX=1",
+        "TINT_BUILD_IS_MAC=0",
+        "TINT_BUILD_IS_WIN=0",
+        "TINT_ENABLE_IR_VALIDATION=0",
+    ],
+    strip_include_prefix = "src",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//3rdparty/spirv-tools",
+        "//3rdparty/spirv-tools:spirv-tools-internal",
+    ],
+)

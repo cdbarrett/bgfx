@@ -50,3 +50,17 @@ cc_library(
     visibility = ["//:__subpackages__"],
     deps = ["//3rdparty/spirv-headers"],
 )
+
+# Internal headers needed by consumers that use spirv-tools' optimizer internals
+# (e.g. tint). Exposed without an include path; consumers add their own private
+# copts so the search paths don't propagate through the dependency graph.
+cc_library(
+    name = "spirv-tools-internal",
+    hdrs = glob([
+        "source/**/*.h",
+        "include/generated/*.h",
+    ]),
+    textual_hdrs = glob(["include/generated/*.inc"]),
+    visibility = ["//:__subpackages__"],
+    deps = ["//3rdparty/spirv-headers"],
+)
