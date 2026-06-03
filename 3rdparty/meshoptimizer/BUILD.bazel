@@ -1,0 +1,10 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "meshoptimizer",
+    srcs = glob(["src/*.cpp"]),
+    hdrs = glob(["src/*.h"]),
+    include_prefix = "meshoptimizer",
+    strip_include_prefix = ".",
+    visibility = ["//:__subpackages__"],
+)

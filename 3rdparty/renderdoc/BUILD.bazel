@@ -1,0 +1,9 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "renderdoc",
+    hdrs = ["renderdoc_app.h"],
+    include_prefix = "renderdoc",
+    strip_include_prefix = ".",
+    visibility = ["//:__subpackages__"],
+)

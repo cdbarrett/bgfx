@@ -1,0 +1,35 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "wsl",
+    hdrs = glob([
+        "include/wsl/*.h",
+    ]),
+    strip_include_prefix = "include",
+)
+
+cc_library(
+    name = "wsl-stubs",
+    hdrs = glob([
+        "include/wsl/stubs/**/*.h",
+    ]),
+    strip_include_prefix = "include/wsl/stubs",
+)
+
+cc_library(
+    name = "directx",
+    hdrs = glob([
+        "include/directx/*.h",
+    ]),
+    strip_include_prefix = "include/directx",
+)
+
+cc_library(
+    name = "directx-headers",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":directx",
+        ":wsl",
+        ":wsl-stubs",
+    ],
+)

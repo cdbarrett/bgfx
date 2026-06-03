@@ -1,0 +1,20 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "dear-imgui",
+    srcs = glob(["**/*.cpp"]),
+    hdrs = glob(["**/*.h"]),
+    copts = [
+        "-march=native",
+        "-Wno-unused-function",
+    ],
+    cxxopts = ["-std=c++20"],
+    include_prefix = "dear-imgui",
+    strip_include_prefix = ".",
+    textual_hdrs = glob(["**/*.inl"]),
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//3rdparty/stb",
+        "@bx",
+    ],
+)

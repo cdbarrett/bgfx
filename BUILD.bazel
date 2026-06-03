@@ -1,0 +1,35 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "bgfx",
+    srcs = glob(
+        [
+            "src/*.cpp",
+            "src/*.h",
+        ],
+        exclude = ["src/amalgamated.cpp"],
+    ),
+    hdrs = glob(["include/**/*.h"]),
+    copts = ["-march=native"],
+    cxxopts = ["-std=c++20"],
+    defines = [
+        "WL_EGL_PLATFORM=1",
+        "BGFX_CONFIG_RENDERER_VULKAN=1",
+        "BGFX_CONFIG_RENDERER_OPENGL=1",
+    ],
+    linkopts = [
+        "-lwayland-egl",
+        "-lX11",
+        "-lGL",
+    ],
+    strip_include_prefix = "include",
+    target_compatible_with = ["@platforms//os:linux"],
+    textual_hdrs = ["src/bgfx.cpp"] + glob(["src/*.inl"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//3rdparty/khronos",
+        "//3rdparty/renderdoc",
+        "@bimg",
+        "@bx",
+    ],
+)

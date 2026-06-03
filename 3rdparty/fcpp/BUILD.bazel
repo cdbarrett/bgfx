@@ -1,0 +1,19 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "fcpp",
+    srcs = glob(
+        ["*.c"],
+        exclude = ["usecpp.c"],
+    ),
+    hdrs = glob(["*.h"]),
+    copts = ["-Wno-parentheses-equality"],
+    local_defines = [
+        "NINCLUDE=64",
+        "NWORK=65536",
+        "NBUFF=65536",
+        "OLD_PREPROCESSOR=0",
+    ],
+    strip_include_prefix = ".",
+    visibility = ["//:__subpackages__"],
+)

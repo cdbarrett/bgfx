@@ -1,0 +1,20 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "geometryv",
+    srcs = glob([
+        "*.cpp",
+        "*.h",
+    ]),
+    copts = [
+        "-march=native",
+        "-Wno-unused-but-set-variable",
+    ],
+    cxxopts = ["-std=c++20"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:bgfx",
+        "//examples/common",
+        "@bx",
+    ],
+)

@@ -17,7 +17,7 @@
 
 #ifndef _WIN32
 
-#include "../wsl/winadapter.h"
+#include "wsl/winadapter.h"
 
 constexpr uint8_t nybble_from_hex(char c) {
   return ((c >= '0' && c <= '9')

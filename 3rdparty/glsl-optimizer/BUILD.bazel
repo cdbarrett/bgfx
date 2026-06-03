@@ -1,0 +1,29 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "glsl",
+)
+
+cc_library(
+    name = "mesa",
+)
+
+cc_library(
+    name = "util",
+    srcs = glob([
+        "src/util/*.c",
+        "src/util/*.h",
+    ]),
+    hdrs = glob(["include/**/*.h"]),
+    strip_include_prefix = "include",
+)
+
+cc_library(
+    name = "glsl-optimizer",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":glsl",
+        ":mesa",
+        ":util",
+    ],
+)

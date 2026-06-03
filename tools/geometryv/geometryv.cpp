@@ -738,7 +738,7 @@ int _main_(int _argc, char** _argv)
 		, 0
 		);
 
-	imguiCreate();
+	imguiCreate(28.0f);
 
 	ddInit();
 
