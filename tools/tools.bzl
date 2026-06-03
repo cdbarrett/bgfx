@@ -148,6 +148,8 @@ bgfx_shader = rule(
     },
 )
 
+# ==========================================================================
+
 def _bgfx_geometry_impl(ctx):
     args = ctx.actions.args()
     args.add("-f", ctx.file.src)
@@ -219,6 +221,210 @@ bgfx_geometry = rule(
             default = Label("//tools/geometryc:geometryc"),
             executable = True,
             cfg = "target",
+        ),
+    },
+)
+
+# ==========================================================================
+
+def _bgfx_texture_impl(ctx):
+    args = ctx.actions.args()
+    args.add("-f", ctx.file.src)
+    args.add("-o", ctx.outputs.out)
+    args.add("-t", ctx.attr.format)
+
+    if ctx.attr.quality:
+        args.add("-q", ctx.attr.quality)
+
+    if ctx.attr.num_mips:
+        args.add("--mips", ctx.attr.num_mips)
+
+    if ctx.attr.skip_mips:
+        args.add("--mipskip", ctx.attr.skip_mips)
+
+    if ctx.attr.normal_map:
+        args.add("--normalmap")
+
+    if ctx.attr.equirectangular:
+        args.add("--equirect")
+
+    if ctx.attr.strip:
+        args.add("--strip")
+
+    if ctx.attr.sdf:
+        args.add("--sdf")
+
+    if ctx.attr.alpha_ref:
+        args.add("--ref", ctx.attr.alpha_ref)
+
+    if ctx.attr.iqa:
+        args.add("--iqa")
+
+    if ctx.attr.premultiply_alpha:
+        args.add("--pma")
+
+    if ctx.attr.linear:
+        args.add("--linear")
+
+    if ctx.attr.max_size:
+        args.add("--max", ctx.attr.max_size)
+
+    if ctx.attr.radiance:
+        args.add("--radiance", ctx.attr.radiance)
+
+    if ctx.attr.save_as:
+        args.add("--as", ctx.attr.save_as)
+
+    ctx.actions.run(
+        inputs = [ctx.file.src],
+        outputs = [ctx.outputs.out],
+        executable = ctx.executable._tool,
+        arguments = [args],
+        mnemonic = "Texturec",
+    )
+    return [DefaultInfo(files = depset([ctx.outputs.out]))]
+
+bgfx_texture = rule(
+    implementation = _bgfx_texture_impl,
+    doc = "Rule that compiles textures using bimg's texturec tool.",
+    attrs = {
+        "src": attr.label(allow_single_file = True, mandatory = True),
+        "out": attr.output(mandatory = True),
+        "format": attr.string(
+            mandatory = True,
+            values = [
+                "r1",
+                "a8",
+                "r8",
+                "r8i",
+                "r8u",
+                "r8s",
+                "r16",
+                "r16i",
+                "r16u",
+                "r16f",
+                "r16s",
+                "r32i",
+                "r32u",
+                "r32f",
+                "rg8",
+                "rg8i",
+                "rg8u",
+                "rg8s",
+                "rg16",
+                "rg16i",
+                "rg16u",
+                "rg16f",
+                "rg16s",
+                "rg32i",
+                "rg32u",
+                "rg32f",
+                "rgb8",
+                "rgb8i",
+                "rgb8u",
+                "rgb8s",
+                "rgb9e5",
+                "bgra8",
+                "rgba8",
+                "rgba8i",
+                "rgba8u",
+                "rgba8s",
+                "rgba16",
+                "rgba16i",
+                "rgba16u",
+                "rgba16f",
+                "rgba16s",
+                "rgba32i",
+                "rgba32u",
+                "rgba32f",
+                "b5g6r5",
+                "r5g6b5",
+                "bgra4",
+                "rgba4",
+                "bgr5a1",
+                "rgb5a1",
+                "rgb10a2",
+                "rg11b10f",
+                "d16",
+                "d24",
+                "d24s8",
+                "d32",
+                "d16f",
+                "d24f",
+                "d32f",
+                "d0s8",
+                "bc1",
+                "bc2",
+                "bc3",
+                "bc4",
+                "bc5",
+                "bc6h",
+                "bc7",
+                "etc1",
+                "etc2",
+                "etc2a",
+                "etc2a1",
+                "eacr11",
+                "eacr11s",
+                "eacrg11",
+                "eacrg11s",
+                "ptc12",
+                "ptc14",
+                "ptc12a",
+                "ptc14a",
+                "ptc22",
+                "ptc24",
+                "atc",
+                "atce",
+                "atci",
+                "astc4x4",
+                "astc5x4",
+                "astc5x5",
+                "astc6x5",
+                "astc6x6",
+                "astc8x5",
+                "astc8x6",
+                "astc8x8",
+                "astc10x5",
+                "astc10x6",
+                "astc10x8",
+                "astc10x10",
+                "astc12x10",
+                "astc12x12",
+            ],
+        ),
+        "quality": attr.string(
+            values = [
+                "default",
+                "fastest",
+                "highest",
+            ],
+        ),
+        "num_mips": attr.string(),
+        "skip_mips": attr.string(),
+        "normal_map": attr.bool(),
+        "equirectangular": attr.bool(),
+        "strip": attr.bool(),
+        "sdf": attr.bool(),
+        "alpha_ref": attr.string(),
+        "iqa": attr.bool(),
+        "premultiply_alpha": attr.bool(),
+        "linear": attr.bool(),
+        "max_size": attr.string(),
+        "radiance": attr.string(
+            values = [
+                "phong",
+                "phongbrdf",
+                "blinn",
+                "blinnbrdf",
+                "ggx",
+            ],
+        ),
+        "save_as": attr.string(),
+        "_tool": attr.label(
+            default = Label("@bimg//tools/texturec:texturec"),
+            executable = True,
+            cfg = "exec",
         ),
     },
 )
