@@ -13,18 +13,24 @@ bazel_dep(name = "rules_cc", version = "0.2.18")
 bazel_dep(name = "bx", version = "1.0.0")
 bazel_dep(name = "bimg", version = "1.0.0")
 
-# git_override(
+git_override(
+    module_name = "bx",
+    branch = "master",
+    remote = "https://github.com/cdbarrett/bx.git",
+)
+
+git_override(
+    module_name = "bimg",
+    branch = "master",
+    remote = "https://github.com/cdbarrett/bimg.git",
+)
+
+# local_path_override(
 #     module_name = "bx",
-#     commit = "0652d5e3382899f13686e66c538afb1d96b3ca56",
-#     remote = "https://github.com/cdbarrett/bx.git",
+#     path = "../bx",
 # )
 
-local_path_override(
-    module_name = "bx",
-    path = "../bx",
-)
-
-local_path_override(
-    module_name = "bimg",
-    path = "../bimg",
-)
+# local_path_override(
+#     module_name = "bimg",
+#     path = "../bimg",
+# )
