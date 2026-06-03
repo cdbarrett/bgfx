@@ -33,3 +33,4 @@ cc_library(
         "@bx",
     ],
 )
+exports_files(glob(["src/*.sh"]))

@@ -17,8 +17,8 @@ cc_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//:bgfx",
-        "//3rdparty/d3d4linux",
-        "//3rdparty/dawn:tint",
+        # "//3rdparty/d3d4linux",
+        # "//3rdparty/dawn:tint",
         "//3rdparty/directx-headers",
         "//3rdparty/fcpp",
         "//3rdparty/glsl-optimizer",

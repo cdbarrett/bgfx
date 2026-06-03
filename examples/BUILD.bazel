@@ -1,1 +1,24 @@
-# empty
+load("//tools:tools.bzl", "bgfx_geometry", "bgfx_shader")
+
+bgfx_shader(
+    name = "vs_cubes_bin",
+    src = "01-cubes/vs_cubes.sc",
+    out = "01-cubes/vs_cubes.bin",
+    includes = [
+        "//:src/bgfx_compute.sh",
+        "//:src/bgfx_shader.sh",
+        "//examples/common:common.sh",
+        "//examples/common:shaderlib.sh",
+    ],
+    platform = "linux",
+    profile = "spirv",
+    type = "vertex",
+    varying_def = "01-cubes/varying.def.sc",
+)
+
+bgfx_geometry(
+    name = "cube",
+    src = "assets/meshes/cube.obj",
+    out = "assets/meshes/cube.bin",
+    scale_factor = "2.0",
+)

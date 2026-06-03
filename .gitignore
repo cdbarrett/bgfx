@@ -8,5 +8,6 @@
 .git
 .svn
 .vscode
+.cache
 tags
 bazel-*
