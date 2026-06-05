@@ -18,7 +18,10 @@ cc_library(
             "src/tint/**/*_fuzz.cc",
         ],
     ),
-    hdrs = glob(["src/tint/api/**/*.h"]),
+    hdrs = glob([
+        "src/tint/**/*.h",
+        "src/utils/*.h",
+    ]),
     copts = [
         "-std=c++20",
         "-I3rdparty/dawn",
@@ -40,6 +43,7 @@ cc_library(
         "TINT_BUILD_IS_WIN=0",
         "TINT_ENABLE_IR_VALIDATION=0",
     ],
+    includes = ["."],
     strip_include_prefix = "src",
     visibility = ["//:__subpackages__"],
     deps = [

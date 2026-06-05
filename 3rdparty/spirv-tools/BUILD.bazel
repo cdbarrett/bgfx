@@ -1,13 +1,24 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
+    name = "private_headers",
+    hdrs = glob(["source/**/*.h"]),
+    strip_include_prefix = ".",
+)
+
+cc_library(
+    name = "generated_headers",
+    hdrs = glob(["include/generated/*.h"]),
+    strip_include_prefix = "include/generated",
+    textual_hdrs = glob(["include/generated/*.inc"]),
+)
+
+cc_library(
     name = "spirv-tools",
     srcs = glob([
         "source/opt/*.cpp",
         "source/reduce/*.cpp",
         "source/val/*.cpp",
-        "source/**/*.h",
-        "include/generated/*.h",
     ]) + [
         "source/assembly_grammar.cpp",
         "source/binary.cpp",
@@ -40,27 +51,21 @@ cc_library(
         "include/spirv-tools/*.h",
         "include/spirv-tools/*.hpp",
     ]),
-    copts = [
-        "-I3rdparty/spirv-tools",
-        "-I3rdparty/spirv-tools/include/generated",
-        "-Wno-switch",
-    ],
     strip_include_prefix = "include",
-    textual_hdrs = glob(["include/generated/*.inc"]),
+    deps = [
+        ":generated_headers",
+        ":private_headers",
+        "//3rdparty/spirv-headers",
+    ],
     visibility = ["//:__subpackages__"],
-    deps = ["//3rdparty/spirv-headers"],
 )
 
-# Internal headers needed by consumers that use spirv-tools' optimizer internals
-# (e.g. tint). Exposed without an include path; consumers add their own private
-# copts so the search paths don't propagate through the dependency graph.
 cc_library(
     name = "spirv-tools-internal",
-    hdrs = glob([
-        "source/**/*.h",
-        "include/generated/*.h",
-    ]),
-    textual_hdrs = glob(["include/generated/*.inc"]),
     visibility = ["//:__subpackages__"],
-    deps = ["//3rdparty/spirv-headers"],
+    deps = [
+        ":generated_headers",
+        ":private_headers",
+        "//3rdparty/spirv-headers",
+    ],
 )

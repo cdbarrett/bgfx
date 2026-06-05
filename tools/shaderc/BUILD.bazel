@@ -8,10 +8,6 @@ cc_binary(
     ]),
     copts = [
         "-march=native",
-        "-I3rdparty/dawn",
-        "-I3rdparty/glslang",
-        "-I3rdparty/glslang/glslang/Include",
-        "-I3rdparty/glslang/glslang/Public",
     ],
     cxxopts = ["-std=c++20"],
     visibility = ["//visibility:public"],

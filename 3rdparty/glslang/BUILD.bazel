@@ -9,15 +9,13 @@ cc_library(
         ],
         exclude = ["glslang/OSDependent/Windows/**"],
     ),
-    hdrs = glob([
+    hdrs = ["build_info.h"] + glob([
         "glslang/**/*.h",
         "SPIRV/**/*.h",
         "SPIRV/**/*.hpp11",
         "StandAlone/*.h",
-        "build_info.h",
     ]),
     copts = [
-        "-I3rdparty/glslang",
         "-fno-strict-aliasing",
         "-Wno-ignored-qualifiers",
         "-Wno-implicit-fallthrough",
@@ -37,6 +35,11 @@ cc_library(
         "ENABLE_OPT=1",
         "ENABLE_HLSL=1",
     ],
+    includes = [
+        "glslang/Include",
+        "glslang/Public",
+    ],
+    strip_include_prefix = ".",
     visibility = ["//:__subpackages__"],
     deps = ["//3rdparty/spirv-tools"],
 )

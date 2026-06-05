@@ -1,39 +1,70 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
-    name = "glsl-optimizer",
+    name = "includes",
+    hdrs = glob([
+        "include/**/*.h",
+    ]),
+    strip_include_prefix = "include",
+)
+
+cc_library(
+    name = "mesa",
+    srcs = glob([
+        "src/mesa/**/*.c",
+    ]),
+    hdrs = glob([
+        "src/mesa/**/*.h",
+    ]),
+    strip_include_prefix = "src/mesa",
+    deps = [
+        ":includes",
+        ":util",
+    ],
+)
+
+cc_library(
+    name = "util",
+    srcs = glob([
+        "src/util/*.c",
+    ]),
+    hdrs = glob([
+        "src/util/*.h",
+    ]),
+    strip_include_prefix = "src",
+    deps = [
+        ":includes",
+    ],
+)
+
+cc_library(
+    name = "glsl",
     srcs = glob(
         [
-            "src/glsl/*.cpp",
-            "src/glsl/*.h",
-            "src/glsl/glcpp/*.c",
-            "src/glsl/glcpp/*.h",
-            "src/mesa/**/*.h",
-            "src/util/*.h",
-            "include/*.h",
+            "src/glsl/**/*.cpp",
+            "src/glsl/**/*.c",
         ],
         exclude = ["src/glsl/main.cpp"],
-    ) + [
-        "src/glsl/strtod.c",
-        "src/mesa/main/imports.c",
-        "src/mesa/program/prog_hash_table.c",
-        "src/mesa/program/symbol_table.c",
-        "src/util/hash_table.c",
-        "src/util/ralloc.c",
-    ],
-    hdrs = ["src/glsl/glsl_optimizer.h"],
-    copts = [
-        "-I3rdparty/glsl-optimizer/include",
-        "-I3rdparty/glsl-optimizer/src",
-        "-I3rdparty/glsl-optimizer/src/mesa",
-        "-I3rdparty/glsl-optimizer/src/glsl",
-        "-fno-strict-aliasing",
-        "-Wno-implicit-fallthrough",
-        "-Wno-parentheses",
-        "-Wno-sign-compare",
-        "-Wno-unused-function",
-        "-Wno-unused-parameter",
-    ],
+    ),
+    hdrs = glob([
+        "src/glsl/*.h",
+        "src/glsl/glcpp/*.h",
+    ]),
     strip_include_prefix = "src/glsl",
+    deps = [
+        ":includes",
+        ":mesa",
+        ":util",
+    ],
+)
+
+cc_library(
+    name = "glsl-optimizer",
     visibility = ["//:__subpackages__"],
+    deps = [
+        ":glsl",
+        ":includes",
+        ":mesa",
+        ":util",
+    ],
 )

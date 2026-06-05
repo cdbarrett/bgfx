@@ -29,8 +29,12 @@ def _bgfx_shader_impl(ctx):
     if ctx.attr.varying_def:
         args.add("--varyingdef", ctx.file.varying_def.path)
 
+    runfiles = []
+
     if ctx.attr.bin2c:
         args.add("--bin2c", ctx.attr.bin2c)
+    else:
+        runfiles = ctx.outputs.out
 
     for define in ctx.attr.defines:
         args.add("--define", define)
@@ -53,7 +57,11 @@ def _bgfx_shader_impl(ctx):
         arguments = [args],
         mnemonic = "Shaderc",
     )
-    return [DefaultInfo(files = depset([ctx.outputs.out]))]
+
+    return [DefaultInfo(
+        files = depset([ctx.outputs.out]),
+        default_runfiles = ctx.runfiles(files = runfiles),
+    )]
 
 bgfx_shader = rule(
     implementation = _bgfx_shader_impl,
@@ -143,7 +151,7 @@ bgfx_shader = rule(
         "_tool": attr.label(
             default = Label("//tools/shaderc:shaderc"),
             executable = True,
-            cfg = "target",
+            cfg = "exec",
         ),
     },
 )
@@ -192,7 +200,10 @@ def _bgfx_geometry_impl(ctx):
         arguments = [args],
         mnemonic = "Geometryc",
     )
-    return [DefaultInfo(files = depset([ctx.outputs.out]))]
+    return [DefaultInfo(
+        files = depset([ctx.outputs.out]),
+        default_runfiles = ctx.runfiles(files = [ctx.outputs.out]),
+    )]
 
 bgfx_geometry = rule(
     implementation = _bgfx_geometry_impl,
@@ -220,7 +231,7 @@ bgfx_geometry = rule(
         "_tool": attr.label(
             default = Label("//tools/geometryc:geometryc"),
             executable = True,
-            cfg = "target",
+            cfg = "exec",
         ),
     },
 )
@@ -282,7 +293,11 @@ def _bgfx_texture_impl(ctx):
         arguments = [args],
         mnemonic = "Texturec",
     )
-    return [DefaultInfo(files = depset([ctx.outputs.out]))]
+
+    return [DefaultInfo(
+        files = depset([ctx.outputs.out]),
+        default_runfiles = ctx.runfiles(files = [ctx.outputs.out]),
+    )]
 
 bgfx_texture = rule(
     implementation = _bgfx_texture_impl,
