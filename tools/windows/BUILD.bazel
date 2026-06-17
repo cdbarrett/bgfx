@@ -1,0 +1,31 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+
+package(default_visibility = ["//:__subpackages__"])
+
+copy_file(
+    name = "d3d4linux",
+    src = "//tools/bin/windows:d3d4linux.exe",
+    out = "d3d4linux.exe",
+    allow_symlink = False,
+)
+
+copy_file(
+    name = "d3dcompiler_47",
+    src = "//tools/bin/windows:d3dcompiler_47.dll",
+    out = "d3dcompiler_47.dll",
+    allow_symlink = False,
+)
+
+copy_file(
+    name = "dxcompiler",
+    src = "//tools/bin/windows:dxcompiler.dll",
+    out = "dxcompiler.dll",
+    allow_symlink = False,
+)
+
+copy_file(
+    name = "dxil",
+    src = "//tools/bin/windows:dxil.dll",
+    out = "dxil.dll",
+    allow_symlink = False,
+)

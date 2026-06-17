@@ -1,4 +1,21 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+copy_file(
+    name = "libdxcompiler",
+    src = "//tools/bin/linux:libdxcompiler.so",
+    out = "libdxcompiler.so",
+    allow_symlink = False,
+    visibility = ["//visibility:private"],
+)
+
+copy_file(
+    name = "libdxil",
+    src = "//tools/bin/linux:libdxil.so",
+    out = "libdxildll.so",
+    allow_symlink = False,
+    visibility = ["//visibility:private"],
+)
 
 cc_binary(
     name = "shaderc",
@@ -10,18 +27,26 @@ cc_binary(
         "-march=native",
     ],
     cxxopts = ["-std=c++20"],
+    data = [
+        ":libdxcompiler",
+        ":libdxil",
+        "//tools/windows:d3d4linux",
+        "//tools/windows:d3dcompiler_47",
+        "//tools/windows:dxcompiler",
+        "//tools/windows:dxil",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//:bgfx",
-        # "//3rdparty/d3d4linux",
-        # "//3rdparty/dawn:tint",
+        "//3rdparty/d3d4linux",
+        "//3rdparty/dawn:tint",
         "//3rdparty/directx-headers",
         "//3rdparty/fcpp",
         "//3rdparty/glsl-optimizer",
         "//3rdparty/glslang",
         "//3rdparty/spirv-cross",
         "//3rdparty/spirv-tools",
-        "@bx",
         "@bimg",
+        "@bx",
     ],
 )
